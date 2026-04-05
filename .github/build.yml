@@ -1,0 +1,28 @@
+name: Build Magisk Module
+
+on:
+  push:
+    branches: [ "main" ]  # 当 main 分支有变动时触发
+  workflow_dispatch:      # 允许手动点击按钮触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Run packaging script
+        run: python3 ./package.py
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fas-rs-module
+          path: output/  # 指定 package.py 生成的文件夹
